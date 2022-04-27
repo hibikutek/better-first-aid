@@ -1,0 +1,31 @@
+module BetterFirstAid
+{
+    imports
+    {
+        Base
+    }
+
+    recipe Dissect Corpse
+    {
+        CorpseMale/CorpseFemale,
+        keep KitchenKnife/HuntingKnife/Scalpel,
+        Time:200.0,
+        Category:Medical,
+        CanBeDoneFromFloor:true,
+        Result:LeatherStripsDirty,
+        RemoveResultItem:true,
+        OnGiveXP:BFA_OnGiveXP_Dissect,
+        OnCreate:BFA_OnCreate_Damage_Tools,
+    }
+
+    recipe Practice Basic First Aid
+    {
+        CorpseMale/CorpseFemale,
+        AlcoholBandage
+        Time:200.0,
+        Category:Medical,
+        CanBeDoneFromFloor:true,
+        Result:BandageDirty,
+        OnGiveXP:BFA_OnGiveXP_Basic,
+    }
+}
