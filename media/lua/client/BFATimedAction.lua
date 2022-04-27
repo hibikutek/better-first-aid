@@ -5,41 +5,88 @@
 ---
 
 require("TimedActions/ISBaseTimedAction")
+local Utils = require("BetterFirstAid/Utils")
 
-DissectTimedAction = ISBaseTimedAction:derive("dissectTimedAction")
 
-function DissectTimedAction:isValid() -- Check if the action can be done
+BFADissectTimedAction = ISBaseTimedAction:derive("BFADissectTimedAction")
+
+function BFADissectTimedAction:isValid() -- Check if the action can be done
     return true;
 end
 
-function DissectTimedAction:update() -- Trigger every game update when the action is perform
+function BFADissectTimedAction:update() -- Trigger every game update when the action is perform
 end
 
-function DissectTimedAction:waitToStart()
+function BFADissectTimedAction:waitToStart()
     return false;
 end
 
-function DissectTimedAction:start()
+function BFADissectTimedAction:start()
     self:setActionAnim("RipSheets")
 end
 
-function DissectTimedAction:stop() -- Trigger if the action is cancel
+function BFADissectTimedAction:stop() -- Trigger if the action is cancel
     ISBaseTimedAction.stop(self);
 end
 
-function DissectTimedAction:perform()
+function BFADissectTimedAction:perform()
     BFA_OnGiveXP_Dissect(nil, nil, nil, self.character)
-    BFA_OnCreate_Damage_Tools({ self.dissectionTool }, nil, self.character)
+    Utils.DamageTool(self.character, self.dissectionTool)
     self.corpse:getSquare():removeCorpse(self.corpse, false)
     ISBaseTimedAction.perform(self)
 end
 
-function DissectTimedAction:new(character, dissectionTool, corpse)
+function BFADissectTimedAction:new(character, dissectionTool, corpse)
     local o = {}
     setmetatable(o, self)
     self.__index = self
     o.character = character
     o.dissectionTool = dissectionTool
+    o.corpse = corpse
+    o.stopOnWalk = true;
+    o.stopOnRun = true;
+    o.stopOnAim = true;
+    o.maxTime = 200
+    if o.character:isTimedActionInstant() then o.maxTime = 1 end
+    return o
+end
+
+BFABasicTimedAction = ISBaseTimedAction:derive("BFABasicTimedAction")
+
+function BFABasicTimedAction:isValid() -- Check if the action can be done
+    return true;
+end
+
+function BFABasicTimedAction:update() -- Trigger every game update when the action is perform
+end
+
+function BFABasicTimedAction:waitToStart()
+    return false;
+end
+
+function BFABasicTimedAction:start()
+    self:setActionAnim("RemoveGrass")
+end
+
+function BFABasicTimedAction:stop() -- Trigger if the action is cancel
+    ISBaseTimedAction.stop(self);
+end
+
+function BFABasicTimedAction:perform()
+    BFA_OnGiveXP_Basic(nil, nil, nil, self.character)
+    self.character:getInventory():Remove(self.sterilizedBandage)
+    self.character:removeFromHands(self.sterilizedBandage)
+    self.character:setPrimaryHandItem(InventoryItemFactory.CreateItem("BandageDirty"))
+    self.corpse:getSquare():removeCorpse(self.corpse, false)
+    ISBaseTimedAction.perform(self)
+end
+
+function BFABasicTimedAction:new(character, sterilizedBandage, corpse)
+    local o = {}
+    setmetatable(o, self)
+    self.__index = self
+    o.character = character
+    o.sterilizedBandage = sterilizedBandage
     o.corpse = corpse
     o.stopOnWalk = true;
     o.stopOnRun = true;

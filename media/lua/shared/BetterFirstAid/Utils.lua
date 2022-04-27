@@ -17,6 +17,11 @@ local function has_value (tab, val)
     return false
 end
 
+function Utils.IsSterilizedBandage(item)
+    print(item:getType())
+    return item:getType() == "AlcoholBandage"
+end
+
 function Utils.IsDissectionTool(item)
     return has_value(dissectionTools, item:getType())
 end
@@ -26,11 +31,21 @@ function Utils.IsProperDissectionTool(item)
 end
 
 function Utils.CanDissect(player)
+    print("Can Dissect? Perk Lvl: "..player:getPerkLevel(Perks.Doctor))
     return player:getPerkLevel(Perks.Doctor) < 3
 end
 
 function Utils.CanBasicFirstAid(player)
-    return 2 < player:getPerkLevel(Perks.Doctor) < 5
+    local perkLevel = player:getPerkLevel(Perks.Doctor)
+    print(perkLevel)
+    if perkLevel and perkLevel > 1 and perkLevel < 5 then return true end
+end
+
+function Utils.DamageTool(player, item)
+    if not Utils.IsProperDissectionTool(item) then
+        player:Say(getText("UI_BFA_Scalpel_Better"))
+        item:setCondition(item:getCondition() - 1);
+    end
 end
 
 return Utils

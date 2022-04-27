@@ -31,11 +31,12 @@ end
 
 -- OnCreate functions
 function BFA_OnCreate_Damage_Tools(items, result, player)
-    for k, v in pairs(items) do
+    for i=0,items:size() - 1 do
+        local item = items:get(i)
         -- If it's a knife, lower the condition
-        if v:getType() == "KitchenKnife" or v:getType() == "HuntingKnife" then
+        if item:getType() == "KitchenKnife" or item:getType() == "HuntingKnife" then
             player:Say(getText("UI_BFA_Scalpel_Better"))
-            v:setCondition(v:getCondition() - 1);
+            item:setCondition(item:getCondition() - 1);
         end
     end
 end

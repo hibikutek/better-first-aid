@@ -21,7 +21,7 @@ module BetterFirstAid
     recipe Practice Basic First Aid
     {
         CorpseMale/CorpseFemale,
-        AlcoholBandage
+        AlcoholBandage,
         Time:200.0,
         Category:Medical,
         CanBeDoneFromFloor:true,

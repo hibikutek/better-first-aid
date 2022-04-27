@@ -2,7 +2,8 @@ UI_EN = {
 
 --UI_BFA
 UI_BFA_Scalpel_Better = "The knife chipped a bit, a scalpel would be better"
-UI_BFA_Disect_Corpse = "Disect Corpse"
+UI_BFA_Dissect_Corpse = "Dissect Corpse"
+UI_BFA_Basic_First_Aid = "Practice Basic First Aid"
 
 --UI_BFA_Learning
 UI_BFA_Learning_No_More_Dissect = "I can't learn anything more from this, I should sterilize bandages and practice Basic First Aid"
